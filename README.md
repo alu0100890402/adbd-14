@@ -31,5 +31,3 @@ Se quiere diseñar un sistema de base de datos para la organización **Torrani**
 - Empresas denunciadas y **malas acciones**.
 - *Sanciones* y grado de protección.
 - Inversión hecha en un punto de interés.
-
-Prueba
