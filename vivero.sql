@@ -27,8 +27,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Vivero` (
   `Zona_Codigo_Zona` INT NOT NULL,
   `Zona_Codigo_Zona1` INT NOT NULL,
   `Zona_Codigo_Zona2` INT NOT NULL,
-  PRIMARY KEY (`coordenada_x`, `coordenada_Y`, `Zona_Codigo_Zona1`))
-ENGINE = InnoDB;
+  PRIMARY KEY (`coordenada_x`, `coordenada_Y`, `Zona_Codigo_Zona1`));
 
 
 -- -----------------------------------------------------
@@ -48,8 +47,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Zona` (
     FOREIGN KEY (`Vivero_coordenada_x` , `Vivero_coordenada_Y` , `Vivero_Zona_Codigo_Zona1`)
     REFERENCES `mydb`.`Vivero` (`coordenada_x` , `coordenada_Y` , `Zona_Codigo_Zona1`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    ON UPDATE NO ACTION);
 
 
 -- -----------------------------------------------------
@@ -61,8 +59,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Empleados` (
   `Numero_Seg_Social` VARCHAR(45) NULL,
   `Telefono` INT NULL,
   `Dirección` VARCHAR(100) NULL,
-  PRIMARY KEY (`DNI`))
-ENGINE = InnoDB;
+  PRIMARY KEY (`DNI`));
 
 
 -- -----------------------------------------------------
@@ -87,8 +84,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Trabaja` (
     FOREIGN KEY (`Zona_Codigo_Zona1`)
     REFERENCES `mydb`.`Zona` (`Codigo_Zona`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    ON UPDATE NO ACTION);
 
 
 -- -----------------------------------------------------
@@ -99,8 +95,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Producto` (
   `Stock` INT NULL,
   `Cod_barras` INT NOT NULL,
   `PVP` DECIMAL(2) NULL,
-  PRIMARY KEY (`Cod_barras`))
-ENGINE = InnoDB;
+  PRIMARY KEY (`Cod_barras`));
 
 
 -- -----------------------------------------------------
@@ -113,8 +108,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Cliente` (
   `Cod_Fid` INT NULL,
   `Vol_Mensual` INT NULL,
   `Bonif` INT NULL,
-  PRIMARY KEY (`DNI`))
-ENGINE = InnoDB;
+  PRIMARY KEY (`DNI`));
 
 
 -- -----------------------------------------------------
@@ -137,8 +131,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Pedido` (
     FOREIGN KEY (`Cliente_DNI`)
     REFERENCES `mydb`.`Cliente` (`DNI`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    ON UPDATE NO ACTION);
 
 
 -- -----------------------------------------------------
@@ -158,8 +151,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Asigna` (
     FOREIGN KEY (`Producto_Cod_barras`)
     REFERENCES `mydb`.`Producto` (`Cod_barras`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    ON UPDATE NO ACTION);
 
 
 -- -----------------------------------------------------
@@ -181,8 +173,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Contiene` (
     FOREIGN KEY (`Producto_Cod_barras1`)
     REFERENCES `mydb`.`Producto` (`Cod_barras`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    ON UPDATE NO ACTION);
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
