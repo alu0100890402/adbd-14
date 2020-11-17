@@ -24,11 +24,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Vivero` (
   `coordenada_x` INT NOT NULL,
   `coordenada_Y` INT NOT NULL,
   `Nombre` VARCHAR(45) NULL,
-  `Zona_Codigo_Zona` INT NOT NULL,
-  `Zona_Codigo_Zona1` INT NOT NULL,
-  `Zona_Codigo_Zona2` INT NOT NULL,
-  PRIMARY KEY (`coordenada_x`, `coordenada_Y`, `Zona_Codigo_Zona1`));
-
+  PRIMARY KEY (`coordenada_x`, `coordenada_Y`)
+);
 
 -- -----------------------------------------------------
 -- Table `mydb`.`Zona`
@@ -39,13 +36,11 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Zona` (
   `Tamaño` INT NULL,
   `Vivero_coordenada_x` INT NOT NULL,
   `Vivero_coordenada_Y` INT NOT NULL,
-  `Vivero_Zona_Codigo_Zona1` INT NOT NULL,
-  `Zona_Codigo_Zona` INT NOT NULL,
-  PRIMARY KEY (`Codigo_Zona`, `Zona_Codigo_Zona`),
-  INDEX `fk_Zona_Vivero1_idx` (`Vivero_coordenada_x` ASC, `Vivero_coordenada_Y` ASC, `Vivero_Zona_Codigo_Zona1` ASC),
-  CONSTRAINT `fk_Zona_Vivero1`
-    FOREIGN KEY (`Vivero_coordenada_x` , `Vivero_coordenada_Y` , `Vivero_Zona_Codigo_Zona1`)
-    REFERENCES `mydb`.`Vivero` (`coordenada_x` , `coordenada_Y` , `Zona_Codigo_Zona1`)
+  PRIMARY KEY (`Codigo_Zona`),
+  INDEX `fk_Zona_Vivero_idx` (`Vivero_coordenada_x` ASC, `Vivero_coordenada_Y` ASC),
+  CONSTRAINT `fk_Zona_Vivero`
+    FOREIGN KEY (`Vivero_coordenada_x`, `Vivero_coordenada_Y`)
+    REFERENCES `mydb`.`Vivero` (`coordenada_x`, `coordenada_Y`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
@@ -70,18 +65,16 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Trabaja` (
   `Empleados_DNI` VARCHAR(9) NOT NULL,
   `Zona_Codigo_Zona` INT NOT NULL,
   `Fecha_Fin` DATE NOT NULL,
-  `Empleados_DNI1` VARCHAR(9) NOT NULL,
-  `Zona_Codigo_Zona1` INT NOT NULL,
-  PRIMARY KEY (`Fecha_Ini`, `Fecha_Fin`, `Empleados_DNI1`, `Zona_Codigo_Zona1`),
-  INDEX `fk_Trabaja_Empleados1_idx` (`Empleados_DNI1` ASC),
-  INDEX `fk_Trabaja_Zona1_idx` (`Zona_Codigo_Zona1` ASC),
-  CONSTRAINT `fk_Trabaja_Empleados1`
-    FOREIGN KEY (`Empleados_DNI1`)
+  PRIMARY KEY (`Fecha_Ini`, `Fecha_Fin`, `Empleados_DNI`, `Zona_Codigo_Zona`),
+  INDEX `fk_Trabaja_Empleados_idx` (`Empleados_DNI` ASC),
+  INDEX `fk_Trabaja_Zona_idx` (`Zona_Codigo_Zona` ASC),
+  CONSTRAINT `fk_Trabaja_Empleados`
+    FOREIGN KEY (`Empleados_DNI`)
     REFERENCES `mydb`.`Empleados` (`DNI`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Trabaja_Zona1`
-    FOREIGN KEY (`Zona_Codigo_Zona1`)
+  CONSTRAINT `fk_Trabaja_Zona`
+    FOREIGN KEY (`Zona_Codigo_Zona`)
     REFERENCES `mydb`.`Zona` (`Codigo_Zona`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
@@ -119,15 +112,15 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Pedido` (
   `Importe` DECIMAL(2) NULL,
   `Empleados_DNI` VARCHAR(9) NOT NULL,
   `Cliente_DNI` VARCHAR(9) NOT NULL,
-  PRIMARY KEY (`Cod_Pedido`, `Empleados_DNI`, `Cliente_DNI`),
-  INDEX `fk_Pedido_Empleados1_idx` (`Empleados_DNI` ASC),
-  INDEX `fk_Pedido_Cliente1_idx` (`Cliente_DNI` ASC),
-  CONSTRAINT `fk_Pedido_Empleados1`
+  PRIMARY KEY (`Cod_Pedido`),
+  INDEX `fk_Pedido_Empleados_idx` (`Empleados_DNI` ASC),
+  INDEX `fk_Pedido_Cliente_idx` (`Cliente_DNI` ASC),
+  CONSTRAINT `fk_Pedido_Empleados`
     FOREIGN KEY (`Empleados_DNI`)
     REFERENCES `mydb`.`Empleados` (`DNI`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Pedido_Cliente1`
+  CONSTRAINT `fk_Pedido_Cliente`
     FOREIGN KEY (`Cliente_DNI`)
     REFERENCES `mydb`.`Cliente` (`DNI`)
     ON DELETE NO ACTION
@@ -138,16 +131,16 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Pedido` (
 -- Table `mydb`.`Asigna`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`Asigna` (
-  `Zona_Zona_Codigo_Zona` INT NOT NULL,
+  `Codigo_Zona` INT NOT NULL,
   `Producto_Cod_barras` INT NOT NULL,
-  PRIMARY KEY (`Zona_Zona_Codigo_Zona`, `Producto_Cod_barras`),
-  INDEX `fk_Asigna_Producto1_idx` (`Producto_Cod_barras` ASC),
-  CONSTRAINT `fk_Asigna_Zona1`
-    FOREIGN KEY (`Zona_Zona_Codigo_Zona`)
-    REFERENCES `mydb`.`Zona` (`Zona_Codigo_Zona`)
+  PRIMARY KEY (`Codigo_Zona`, `Producto_Cod_barras`),
+  INDEX `fk_Asigna_Producto_idx` (`Producto_Cod_barras` ASC),
+  CONSTRAINT `fk_Asigna_Zona`
+    FOREIGN KEY (`Codigo_Zona`)
+    REFERENCES `mydb`.`Zona` (`Codigo_Zona`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Asigna_Producto1`
+  CONSTRAINT `fk_Asigna_Producto`
     FOREIGN KEY (`Producto_Cod_barras`)
     REFERENCES `mydb`.`Producto` (`Cod_barras`)
     ON DELETE NO ACTION
@@ -160,17 +153,17 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Asigna` (
 CREATE TABLE IF NOT EXISTS `mydb`.`Contiene` (
   `Pedido_Cod_Pedido` INT NOT NULL,
   `Cantidad` INT NULL,
-  `Producto_Cod_barras1` INT NOT NULL,
-  INDEX `fk_Contiene_Pedido1_idx` (`Pedido_Cod_Pedido` ASC),
-  PRIMARY KEY (`Pedido_Cod_Pedido`, `Producto_Cod_barras1`),
-  INDEX `fk_Contiene_Producto1_idx` (`Producto_Cod_barras1` ASC),
-  CONSTRAINT `fk_Contiene_Pedido1`
+  `Producto_Cod_barras` INT NOT NULL,
+  INDEX `fk_Contiene_Pedido_idx` (`Pedido_Cod_Pedido` ASC) ,
+  PRIMARY KEY (`Pedido_Cod_Pedido`, `Producto_Cod_barras`),
+  INDEX `fk_Contiene_Producto_idx` (`Producto_Cod_barras` ASC),
+  CONSTRAINT `fk_Contiene_Pedido`
     FOREIGN KEY (`Pedido_Cod_Pedido`)
     REFERENCES `mydb`.`Pedido` (`Cod_Pedido`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Contiene_Producto1`
-    FOREIGN KEY (`Producto_Cod_barras1`)
+  CONSTRAINT `fk_Contiene_Producto`
+    FOREIGN KEY (`Producto_Cod_barras`)
     REFERENCES `mydb`.`Producto` (`Cod_barras`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
