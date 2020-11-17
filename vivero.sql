@@ -8,19 +8,19 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema Viveros
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema Viveros
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
-USE `mydb` ;
+CREATE SCHEMA IF NOT EXISTS `Viveros` DEFAULT CHARACTER SET utf8 ;
+USE `Viveros` ;
 
 -- -----------------------------------------------------
--- Table `mydb`.`Vivero`
+-- Table `Viveros`.`Vivero`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Vivero` (
+CREATE TABLE IF NOT EXISTS `Viveros`.`Vivero` (
   `coordenada_x` INT NOT NULL,
   `coordenada_Y` INT NOT NULL,
   `Nombre` VARCHAR(45) NULL,
@@ -28,9 +28,9 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Vivero` (
 );
 
 -- -----------------------------------------------------
--- Table `mydb`.`Zona`
+-- Table `Viveros`.`Zona`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Zona` (
+CREATE TABLE IF NOT EXISTS `Viveros`.`Zona` (
   `Codigo_Zona` INT NOT NULL,
   `Nombre` VARCHAR(45) NULL,
   `Tamaño` INT NULL,
@@ -40,15 +40,15 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Zona` (
   INDEX `fk_Zona_Vivero_idx` (`Vivero_coordenada_x` ASC, `Vivero_coordenada_Y` ASC),
   CONSTRAINT `fk_Zona_Vivero`
     FOREIGN KEY (`Vivero_coordenada_x`, `Vivero_coordenada_Y`)
-    REFERENCES `mydb`.`Vivero` (`coordenada_x`, `coordenada_Y`)
+    REFERENCES `Viveros`.`Vivero` (`coordenada_x`, `coordenada_Y`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Empleados`
+-- Table `Viveros`.`Empleados`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Empleados` (
+CREATE TABLE IF NOT EXISTS `Viveros`.`Empleados` (
   `DNI` VARCHAR(9) NOT NULL,
   `Nombre` VARCHAR(45) NULL,
   `Numero_Seg_Social` VARCHAR(45) NULL,
@@ -58,9 +58,9 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Empleados` (
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Trabaja`
+-- Table `Viveros`.`Trabaja`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Trabaja` (
+CREATE TABLE IF NOT EXISTS `Viveros`.`Trabaja` (
   `Fecha_Ini` DATE NOT NULL,
   `Empleados_DNI` VARCHAR(9) NOT NULL,
   `Zona_Codigo_Zona` INT NOT NULL,
@@ -70,20 +70,20 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Trabaja` (
   INDEX `fk_Trabaja_Zona_idx` (`Zona_Codigo_Zona` ASC),
   CONSTRAINT `fk_Trabaja_Empleados`
     FOREIGN KEY (`Empleados_DNI`)
-    REFERENCES `mydb`.`Empleados` (`DNI`)
+    REFERENCES `Viveros`.`Empleados` (`DNI`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Trabaja_Zona`
     FOREIGN KEY (`Zona_Codigo_Zona`)
-    REFERENCES `mydb`.`Zona` (`Codigo_Zona`)
+    REFERENCES `Viveros`.`Zona` (`Codigo_Zona`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Producto`
+-- Table `Viveros`.`Producto`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Producto` (
+CREATE TABLE IF NOT EXISTS `Viveros`.`Producto` (
   `Tipo` VARCHAR(45) NULL,
   `Stock` INT NULL,
   `Cod_barras` INT NOT NULL,
@@ -92,9 +92,9 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Producto` (
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Cliente`
+-- Table `Viveros`.`Cliente`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Cliente` (
+CREATE TABLE IF NOT EXISTS `Viveros`.`Cliente` (
   `DNI` VARCHAR(9) NOT NULL,
   `Nombre` VARCHAR(45) NULL,
   `Fecha_nac` DATE NULL,
@@ -105,9 +105,9 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Cliente` (
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Pedido`
+-- Table `Viveros`.`Pedido`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Pedido` (
+CREATE TABLE IF NOT EXISTS `Viveros`.`Pedido` (
   `Cod_Pedido` INT NOT NULL,
   `Importe` DECIMAL(2) NULL,
   `Empleados_DNI` VARCHAR(9) NOT NULL,
@@ -117,40 +117,40 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Pedido` (
   INDEX `fk_Pedido_Cliente_idx` (`Cliente_DNI` ASC),
   CONSTRAINT `fk_Pedido_Empleados`
     FOREIGN KEY (`Empleados_DNI`)
-    REFERENCES `mydb`.`Empleados` (`DNI`)
+    REFERENCES `Viveros`.`Empleados` (`DNI`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Pedido_Cliente`
     FOREIGN KEY (`Cliente_DNI`)
-    REFERENCES `mydb`.`Cliente` (`DNI`)
+    REFERENCES `Viveros`.`Cliente` (`DNI`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Asigna`
+-- Table `Viveros`.`Asigna`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Asigna` (
+CREATE TABLE IF NOT EXISTS `Viveros`.`Asigna` (
   `Codigo_Zona` INT NOT NULL,
   `Producto_Cod_barras` INT NOT NULL,
   PRIMARY KEY (`Codigo_Zona`, `Producto_Cod_barras`),
   INDEX `fk_Asigna_Producto_idx` (`Producto_Cod_barras` ASC),
   CONSTRAINT `fk_Asigna_Zona`
     FOREIGN KEY (`Codigo_Zona`)
-    REFERENCES `mydb`.`Zona` (`Codigo_Zona`)
+    REFERENCES `Viveros`.`Zona` (`Codigo_Zona`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Asigna_Producto`
     FOREIGN KEY (`Producto_Cod_barras`)
-    REFERENCES `mydb`.`Producto` (`Cod_barras`)
+    REFERENCES `Viveros`.`Producto` (`Cod_barras`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Contiene`
+-- Table `Viveros`.`Contiene`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Contiene` (
+CREATE TABLE IF NOT EXISTS `Viveros`.`Contiene` (
   `Pedido_Cod_Pedido` INT NOT NULL,
   `Cantidad` INT NULL,
   `Producto_Cod_barras` INT NOT NULL,
@@ -159,12 +159,12 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Contiene` (
   INDEX `fk_Contiene_Producto_idx` (`Producto_Cod_barras` ASC),
   CONSTRAINT `fk_Contiene_Pedido`
     FOREIGN KEY (`Pedido_Cod_Pedido`)
-    REFERENCES `mydb`.`Pedido` (`Cod_Pedido`)
+    REFERENCES `Viveros`.`Pedido` (`Cod_Pedido`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Contiene_Producto`
     FOREIGN KEY (`Producto_Cod_barras`)
-    REFERENCES `mydb`.`Producto` (`Cod_barras`)
+    REFERENCES `Viveros`.`Producto` (`Cod_barras`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
