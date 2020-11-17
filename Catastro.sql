@@ -14,16 +14,15 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema mydb
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
-USE `mydb` ;
+CREATE SCHEMA IF NOT EXISTS `Catastro` DEFAULT CHARACTER SET utf8 ;
+USE `Catastro` ;
 
 -- -----------------------------------------------------
 -- Table `mydb`.`Zona`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Zona` (
+CREATE TABLE IF NOT EXISTS `Catastro`.`Zona` (
   `Codigo Postal` INT NOT NULL,
   `Nombre` VARCHAR(45) NOT NULL,
-  `Zonacol` VARCHAR(45) NULL,
   PRIMARY KEY (`Codigo Postal`))
 ENGINE = InnoDB;
 
@@ -31,16 +30,16 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`Persona`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Persona` (
+CREATE TABLE IF NOT EXISTS `Catastro`.`Persona` (
   `DNI` VARCHAR(9) NOT NULL,
   `Nombre` VARCHAR(45) NOT NULL,
   `Fecha_Nacimiento` DATE NULL,
   `Persona_DNI_C.F` VARCHAR(9) NOT NULL,
   PRIMARY KEY (`DNI`, `Persona_DNI_C.F`),
-  INDEX `fk_Persona_Persona1_idx` (`Persona_DNI_C.F` ASC) VISIBLE,
-  CONSTRAINT `fk_Persona_Persona1`
+  INDEX `fk_Persona_Persona_idx` (`Persona_DNI_C.F` ASC),
+  CONSTRAINT `fk_Persona_Persona`
     FOREIGN KEY (`Persona_DNI_C.F`)
-    REFERENCES `mydb`.`Persona` (`DNI`)
+    REFERENCES `Catastro`.`Persona` (`DNI`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -49,23 +48,21 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`Vivienda_Uni`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Vivienda_Uni` (
+CREATE TABLE IF NOT EXISTS `Catastro`.`Vivienda_Uni` (
   `Calle` VARCHAR(45) NOT NULL,
   `Numero` INT NOT NULL,
   `Cant_personas` INT NULL,
   `Persona_DNI` VARCHAR(9) NOT NULL,
   `Zona_Codigo Postal` INT NOT NULL,
-  PRIMARY KEY (`Calle`, `Numero`, `Persona_DNI`, `Zona_Codigo Postal`),
-  INDEX `fk_Vivienda_Uni_Persona1_idx` (`Persona_DNI` ASC) VISIBLE,
-  INDEX `fk_Vivienda_Uni_Zona1_idx` (`Zona_Codigo Postal` ASC) VISIBLE,
-  CONSTRAINT `fk_Vivienda_Uni_Persona1`
+  PRIMARY KEY (`Calle`, `Numero`),
+  CONSTRAINT `fk_Vivienda_Uni_Persona`
     FOREIGN KEY (`Persona_DNI`)
-    REFERENCES `mydb`.`Persona` (`DNI`)
+    REFERENCES `Catastro`.`Persona` (`DNI`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Vivienda_Uni_Zona1`
+  CONSTRAINT `fk_Vivienda_Uni_Zona`
     FOREIGN KEY (`Zona_Codigo Postal`)
-    REFERENCES `mydb`.`Zona` (`Codigo Postal`)
+    REFERENCES `Catastro`.`Zona` (`Codigo Postal`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -74,16 +71,16 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`Bloque`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Bloque` (
+CREATE TABLE IF NOT EXISTS `Catastro`.`Bloque` (
   `Calle` VARCHAR(45) NOT NULL,
   `Numero` INT NOT NULL,
   `Cant_personas` INT NULL,
   `Zona_Codigo Postal` INT NOT NULL,
-  PRIMARY KEY (`Calle`, `Numero`, `Zona_Codigo Postal`),
-  INDEX `fk_Bloque_Zona1_idx` (`Zona_Codigo Postal` ASC) VISIBLE,
-  CONSTRAINT `fk_Bloque_Zona1`
+  PRIMARY KEY (`Calle`, `Numero`),
+  INDEX `fk_Bloque_Zona_idx` (`Zona_Codigo Postal` ASC),
+  CONSTRAINT `fk_Bloque_Zona`
     FOREIGN KEY (`Zona_Codigo Postal`)
-    REFERENCES `mydb`.`Zona` (`Codigo Postal`)
+    REFERENCES `Catastro`.`Zona` (`Codigo Postal`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -92,29 +89,27 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`Piso`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Piso` (
+CREATE TABLE IF NOT EXISTS `Catastro`.`Piso` (
   `Bloque_Calle` VARCHAR(45) NOT NULL,
   `Bloque_Numero` INT NOT NULL,
   `Planta` INT NOT NULL,
   `Letra` VARCHAR(1) NOT NULL,
   `Persona_DNI_Dueño` VARCHAR(9) NOT NULL,
   `Persona_DNI_Habita` VARCHAR(9) NOT NULL,
-  PRIMARY KEY (`Bloque_Calle`, `Bloque_Numero`, `Planta`, `Letra`, `Persona_DNI_Dueño`, `Persona_DNI_Habita`),
-  INDEX `fk_Piso_Persona1_idx` (`Persona_DNI_Dueño` ASC) VISIBLE,
-  INDEX `fk_Piso_Persona2_idx` (`Persona_DNI_Habita` ASC) VISIBLE,
+  PRIMARY KEY (`Bloque_Calle`, `Bloque_Numero`, `Planta`, `Letra`),
   CONSTRAINT `fk_Piso_Bloque`
     FOREIGN KEY (`Bloque_Calle` , `Bloque_Numero`)
-    REFERENCES `mydb`.`Bloque` (`Calle` , `Numero`)
+    REFERENCES `Catastro`.`Bloque` (`Calle` , `Numero`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Piso_Persona1`
     FOREIGN KEY (`Persona_DNI_Dueño`)
-    REFERENCES `mydb`.`Persona` (`DNI`)
+    REFERENCES `Catastro`.`Persona` (`DNI`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Piso_Persona2`
     FOREIGN KEY (`Persona_DNI_Habita`)
-    REFERENCES `mydb`.`Persona` (`DNI`)
+    REFERENCES `Catastro`.`Persona` (`DNI`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
