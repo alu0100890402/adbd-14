@@ -101,6 +101,7 @@ CREATE TABLE IF NOT EXISTS `Viveros`.`Cliente` (
   `Cod_Fid` INT NULL,
   `Vol_Mensual` INT NULL,
   `Bonif` INT NULL,
+  `Email` VARCHAR(50),
   PRIMARY KEY (`DNI`));
 
 
