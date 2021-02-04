@@ -1,8 +1,8 @@
 # Proyecto final ADBD
 ## Componentes del grupo
-Carlos Pío Reyes - alu0101132945
-Jorge Porto Hernandez - alu0100890402
-Juan Eduardo Flores Gonzalez - alu0100888423
+..* Carlos Pío Reyes - alu0101132945
+..* Jorge Porto Hernandez - alu0100890402
+..* Juan Eduardo Flores Gonzalez - alu0100888423
 
 ### [Requisitos](https://drive.google.com/file/d/1Mk_Fws0cnXVHXrozmHdO7bLkedA6s9bn/view?usp=sharing&authuser=1)
 ### [Modelo Entidad-Relación](https://drive.google.com/file/d/1310WDrSlCDDioL4g-waBW37hNg-Q_e6Z/view?usp=sharing&authuser=1)
